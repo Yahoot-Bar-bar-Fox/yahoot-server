@@ -51,24 +51,24 @@ io.on('connection', function (socket) {
   
   socket.on('joinRoom', (payload) => {
       socket.join(payload.id, (err) => {
-          io.to(payload.id).emit('someoneJoined', (payload) => {
-              Room
-                .findByPk(payload.id)
-                .then(room => {
-                    let newTotalPlayer = room.totalPlayer + 1
-                    return Room.update({totalPlayer: newTotalPlayer}, { 
-                        where: {
-                            id: payload.id
-                        }
-                    })
+          Room
+            .findByPk(payload.id)
+            .then(room => {
+                let newTotalPlayer = room.totalPlayer + 1
+                return Room.update({totalPlayer: newTotalPlayer}, { 
+                    where: {
+                        id: payload.id
+                    }
                 })
-                .then(room => {
-                    console.log('added total player')
-                })
-                .catch(err => [
-                    console.log(err)
-                ])
-          })
+            })
+            .then(room => {
+                // console.log('added total player')
+                io.to(payload.id).emit('someoneJoined', payload.username)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+
       })
   })
   
