@@ -6,17 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   Room.init({
-    name: {
-      type: DataTypes.STRING,
-      validate: {
-        notEmpty: {
-          msg: "Please fill this section"
-        },
-        notNull: {
-          msg: "This section should be exist"
-        }
-      }
-    },
+    name: DataTypes.STRING,
     totalPlayer: DataTypes.INTEGER
   },
   {
