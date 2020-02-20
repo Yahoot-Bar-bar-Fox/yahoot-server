@@ -3,6 +3,7 @@ const app = express()
 const http = require('http')
 const server = http.createServer(app);
 const io = require('socket.io')(server);
+const cors = require('cors')
 const errHandler = require('./middlewares/errorHandler')
 // const router = require('./routes')
 const { Room } = require('./models')
@@ -11,7 +12,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.json)
 app.use(cors())
 
-app.use('/', router)
+// app.use('/', router)
 app.use(errHandler)
 
 io.on('connection', function (socket) {
@@ -42,12 +43,36 @@ io.on('connection', function (socket) {
       Rooms
         .findAll()
         .then(rooms => {
-            socket.emit('fetchRooms', rooms)
+            socket.emit('showRooms', rooms)
         })
         .catch(err => {
             console.log(err)
         })
   })
+  
+  socket.on('joinRoom', (payload) => {
+      socket.join(payload.id, (err) => {
+          io.to(payload.id).emit('someoneJoined', (payload) => {
+              Room
+                .findByPk(payload.id)
+                .then(room => {
+                    let newTotalPlayer = room.totalPlayer + 1
+                    return Room.update({totalPlayer: newTotalPlayer}, { 
+                        where: {
+                            id: payload.id
+                        }
+                    })
+                })
+                .then(room => {
+                    console.log('added total player')
+                })
+                .catch(err => [
+                    console.log(err)
+                ])
+          })
+      })
+  })
+  
 });
 
 server.listen(3000, function () {
