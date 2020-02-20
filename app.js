@@ -19,11 +19,10 @@ io.on('connection', function (socket) {
   console.log('a user connected');
   socket.on('addRooms', (payload) => {
       let dataRoom = {
-          name: payload.name,
-          totalPlayer: payload.totalPlayer
+          name: payload.roomName
       }
-      Room
-        .create(dataRoom)
+
+      Room.create(dataRoom)
         .then(room => {
             socket.join(room.id, (err) => {
                 if (err) {

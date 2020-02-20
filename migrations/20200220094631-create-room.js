@@ -13,7 +13,7 @@ module.exports = {
       },
       totalPlayer: {
         type: Sequelize.INTEGER,
-        defaultValue: 0
+        defaultValue: 1
       },
       createdAt: {
         allowNull: false,
