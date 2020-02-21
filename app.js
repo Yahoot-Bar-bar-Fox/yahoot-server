@@ -51,28 +51,34 @@ io.on('connection', function (socket) {
     })
 
     socket.on('joinRoom', (payload) => {
-        
+        let roomSend
         socket.join(payload.id, (err) => {
             Room
                 .findByPk(payload.id)
                 .then(room => {
-                    console.log(room);
-                    
+                    roomSend = room
                     let newTotalPlayer = room.totalPlayer + 1
                     return Room.update({ totalPlayer: newTotalPlayer }, {
                         where: {
                             id: payload.id
-                        }
+                        },
+                        returning: true
                     })
                 })
-                .then(room => {
-                    io.to(payload.id).emit('someoneJoined', payload.username)
+                .then(room => {                    
+                    io.to(payload.id).emit('someoneJoined', {room: room[1][0], username: payload.username})
                 })
                 .catch(err => {
                     console.log(err)
                 })
 
         })
+    })
+
+    socket.on('startGame', payload => {
+        console.log('startGame jalannnnnnnn', payload);
+        
+        io.to(payload.id).emit('playing', true)
     })
 });
 
