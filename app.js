@@ -8,6 +8,12 @@ const errHandler = require('./middlewares/errorHandler')
 // const router = require('./routes')
 const { Room } = require('./models')
 
+const fs = require('fs')
+const questions = JSON.parse(fs.readFileSync('question.json', 'utf8'))
+// get Random question from question.json,use this function to fetch random question
+const getRandomQuestions = require('./helpers/getQuestions')
+
+
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json)
 app.use(cors())
