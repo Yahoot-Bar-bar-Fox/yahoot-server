@@ -68,10 +68,30 @@
     ]
   },
   {
-    "question": "Klub Yang dibela Kobe Bryant Sepanjang 20 tahun karirnya di NBA adalah...",
+    "question": "Klub Yang dibela legenda basket dunia Kobe Bryant Sepanjang 20 tahun karirnya di NBA adalah...",
     "answer": [
       "la lakers",
       "lakers"
+    ]
+  },
+  {
+    "question": "Sebuah raket tennis dan sebuah bola harganya Rp 32,000. Harga raket lebih mahal Rp 30,000 lebih mahal dari pada bola. Berapakah harga bola ",
+    "answer": [
+      "1000",
+      "1.000",
+      "Rp 1.000",
+      "Rp 1,000",
+      "seribu",
+      "seribu rupiah"
+    ]
+  },
+  {
+    "question": "Ani membeli satu ice cream seharga Rp 4.500. Jika jumlah uang yang ada di dalam saku ani adala Rp 7.000, berapa uang kembalian ani",
+    "answer": [
+      "500",
+      "lima ratus",
+      "lima ratus rupiah",
+      "Rp 500"
     ]
   }
 ]
