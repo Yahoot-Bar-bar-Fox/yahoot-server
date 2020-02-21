@@ -94,6 +94,12 @@ io.on('connection', function (socket) {
     })
   })
 
+  socket.on('highestScore', payload => {
+      socket.join(payload.id, (err) => {
+        io.to(payload.id).emit('catchScore', payload)
+      })
+  })
+
 });
 
 server.listen(3000, function () {
