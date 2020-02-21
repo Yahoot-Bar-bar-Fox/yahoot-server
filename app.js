@@ -50,6 +50,7 @@ io.on('connection', function (socket) {
             })
     })
 
+
     socket.on('joinRoom', (payload) => {
         let roomSend
         socket.join(payload.id, (err) => {
@@ -58,6 +59,8 @@ io.on('connection', function (socket) {
                 .then(room => {
                     roomSend = room
                     let newTotalPlayer = room.totalPlayer + 1
+                    // room.totalPlayer = newTotalPlayer
+                    // return room.save()
                     return Room.update({ totalPlayer: newTotalPlayer }, {
                         where: {
                             id: payload.id
@@ -65,7 +68,8 @@ io.on('connection', function (socket) {
                         returning: true
                     })
                 })
-                .then(room => {                    
+                .then(room => {               
+                    console.log('server berhasil join', room[1] )     
                     io.to(payload.id).emit('someoneJoined', {room: room[1][0], username: payload.username})
                 })
                 .catch(err => {
@@ -76,9 +80,10 @@ io.on('connection', function (socket) {
     })
 
     socket.on('startGame', payload => {
-        console.log('startGame jalannnnnnnn', payload);
-        
-        io.to(payload.id).emit('playing', true)
+        socket.join(payload.id, (err) => {
+            io.to(payload.id).emit('playing', true)
+        })
+        console.log(payload,'---------------------')
     })
 });
 
