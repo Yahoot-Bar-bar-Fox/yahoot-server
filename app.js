@@ -81,9 +81,9 @@ io.on('connection', function (socket) {
 
     socket.on('startGame', payload => {
         socket.join(payload.id, (err) => {
+            console.log(payload,'tinggal jalanin jgamenya nih')
             io.to(payload.id).emit('playing', true)
         })
-        console.log(payload,'---------------------')
     })
 });
 
