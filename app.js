@@ -11,7 +11,7 @@ const { Room } = require('./models')
 const fs = require('fs')
 const questions = JSON.parse(fs.readFileSync('question.json', 'utf8'))
 // get Random question from question.json,use this function to fetch random question
-const getRandomQuestions = require('../helpers/getQuestions')
+const getRandomQuestions = require('./helpers/getQuestions')
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json)
@@ -23,10 +23,10 @@ app.use(errHandler)
 io.on('connection', function (socket) {
     console.log('a user connected')
     socket.on('addRooms', (payload) => {
-        console.log(payload, `jalan addRooms serverrrrrrrrrrrrrr`);
 
         let dataRoom = {
-            name: payload.roomName
+            name: payload.roomName,
+            totalPlayer: 0
         }
 
         Room.create(dataRoom)
@@ -51,10 +51,13 @@ io.on('connection', function (socket) {
     })
 
     socket.on('joinRoom', (payload) => {
+        
         socket.join(payload.id, (err) => {
             Room
                 .findByPk(payload.id)
                 .then(room => {
+                    console.log(room);
+                    
                     let newTotalPlayer = room.totalPlayer + 1
                     return Room.update({ totalPlayer: newTotalPlayer }, {
                         where: {
@@ -63,7 +66,6 @@ io.on('connection', function (socket) {
                     })
                 })
                 .then(room => {
-                    // console.log('added total player')
                     io.to(payload.id).emit('someoneJoined', payload.username)
                 })
                 .catch(err => {
